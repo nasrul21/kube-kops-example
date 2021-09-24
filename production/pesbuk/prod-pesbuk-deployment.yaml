@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pesbuk
+  namespace: production
+  labels:
+    app: pesbuk
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pesbuk
+  template:
+    metadata:
+      namespace: production
+      labels:
+        app: pesbuk
+
+    spec:
+      volumes:
+      - name: config-pesbuk
+        configMap:
+          name: pesbuk-configmap
+
+      containers:
+      - name: pesbuk
+        image: sekolahdevopscilsy/php-sosmed:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: config-pesbuk
+          mountPath: "/var/www/html/config.php"
+          subPath: "config.php"

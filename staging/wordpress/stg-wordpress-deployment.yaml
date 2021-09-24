@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  namespace: staging
+  labels:
+    app: wordpress
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      namespace: staging
+      labels:
+        app: wordpress
+
+    spec:
+      # volumes:
+      # - name: config-pesbuk
+      #   configMap:
+      #     name: pesbuk-configmap
+
+      containers:
+      - name: wordpress
+        image: wordpress:latest
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: LinkToYourDatabase
+        - name: WORDPRESS_DB_USER
+          value: YourDatabaseUser
+        - name: WORDPRESS_DB_PASSWORD
+          value: YourDatabasePassword
+        - name: WORDPRESS_DB_NAME
+          value: YourDatabaseName
+        ports:
+        - containerPort: 80
+        # volumeMounts:
+        # - name: config-pesbuk
+        #   mountPath: "/var/www/html/config.php"
+        #   subPath: "config.php"
